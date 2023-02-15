@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Alert from "react-bootstrap/Alert";
 
 import useHttp from "../hooks/useHttp";
 
@@ -35,11 +36,11 @@ const DUMMY_MEALS = [
 
 const AvailableMeals = () => {
   const [mealsState, setMealsState] = useState(DUMMY_MEALS);
-  const { isLoading, error, sendRequest: fetchTasks } = useHttp();
+  const { isLoading, error, sendRequest: fetchMeals } = useHttp();
 
   useEffect(() => {
-    fetchTasks({
-      url: "https://react-http-6b4a6.firebaseio.com/food.json",
+    fetchMeals({
+      url: "https://us-west-100-cd40-default-rtdb.firebaseio.com/tasks/foodorderapp/meals.json",
       path: "/tasks/foodorderapp",
       rpLoader: (mealsdata) => {
         const rpMeals = [];
@@ -57,7 +58,7 @@ const AvailableMeals = () => {
         console.log("mealsdata[rpMeals]:   ", rpMeals);
       },
     });
-  }, [fetchTasks]);
+  }, [fetchMeals]);
 
   const mealsList = (mealsState ?? DUMMY_MEALS).map((meal) => (
     <MealItem
@@ -71,8 +72,13 @@ const AvailableMeals = () => {
 
   return (
     <section className={classes.meals}>
+      {error && (
+        <Alert key="fetchMealsError" variant="warning">
+          This is a alert—check it out! {error}
+        </Alert>
+      )}
       <Card>
-        <ul>{!isLoading && mealsList}</ul>
+        <ul>{!isLoading && !error && mealsList}</ul>
       </Card>
     </section>
   );
