@@ -1,36 +1,65 @@
-import Card from '../UI/Card';
-import MealItem from './MealItem/MealItem';
-import classes from './AvailableMeals.module.css';
+import React, { useEffect, useState } from "react";
+
+import useHttp from "../hooks/useHttp";
+
+import Card from "../UI/Card";
+import MealItem from "./MealItem/MealItem";
+import classes from "./AvailableMeals.module.css";
 
 const DUMMY_MEALS = [
   {
-    id: 'm1',
-    name: 'Sushi',
-    description: 'Finest fish and veggies',
+    id: "ts1",
+    name: "Tuna Sushi",
+    description: "Finest fish and veggies",
     price: 22.99,
   },
   {
-    id: 'm2',
-    name: 'Schnitzel',
-    description: 'A german specialty!',
+    id: "bs2",
+    name: "Breaded Schnitzel",
+    description: "A german specialty!",
     price: 16.5,
   },
   {
-    id: 'm3',
-    name: 'Barbecue Burger',
-    description: 'American, raw, meaty',
-    price: 12.99,
+    id: "bbb3",
+    name: "BBQ Beef Burger",
+    description: "American, raw, meaty",
+    price: 15.99,
   },
   {
-    id: 'm4',
-    name: 'Green Bowl',
-    description: 'Healthy...and green...',
+    id: "gmb4",
+    name: "Green Mix Bowl",
+    description: "Mix of green",
     price: 18.99,
   },
 ];
 
 const AvailableMeals = () => {
-  const mealsList = DUMMY_MEALS.map((meal) => (
+  const [mealsState, setMealsState] = useState(DUMMY_MEALS);
+  const { isLoading, error, sendRequest: fetchTasks } = useHttp();
+
+  useEffect(() => {
+    fetchTasks({
+      url: "https://react-http-6b4a6.firebaseio.com/food.json",
+      path: "/tasks/foodorderapp",
+      rpLoader: (mealsdata) => {
+        const rpMeals = [];
+
+        for (const mealKey in mealsdata) {
+          rpMeals.push({
+            id: mealKey,
+            name: mealsdata[mealKey].name,
+            description: mealsdata[mealKey].description,
+            price: mealsdata[mealKey].price,
+          });
+        }
+
+        setMealsState(rpMeals);
+        console.log("mealsdata[rpMeals]:   ", rpMeals);
+      },
+    });
+  }, [fetchTasks]);
+
+  const mealsList = (mealsState ?? DUMMY_MEALS).map((meal) => (
     <MealItem
       key={meal.id}
       id={meal.id}
@@ -43,7 +72,7 @@ const AvailableMeals = () => {
   return (
     <section className={classes.meals}>
       <Card>
-        <ul>{mealsList}</ul>
+        <ul>{!isLoading && mealsList}</ul>
       </Card>
     </section>
   );
