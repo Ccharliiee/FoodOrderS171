@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
 import useHttp from "../hooks/useHttp";
 
@@ -77,7 +78,10 @@ const AvailableMeals = () => {
         </Alert>
       )}
       <Card>
-        <ul>{!isLoading && !error && mealsList}</ul>
+        <ul>
+          {isLoading && <Spinner animation="border" variant="primary" />}
+          {!isLoading && !error && mealsList}
+        </ul>
       </Card>
     </section>
   );
