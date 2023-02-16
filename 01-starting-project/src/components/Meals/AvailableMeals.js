@@ -40,8 +40,7 @@ const AvailableMeals = () => {
 
   useEffect(() => {
     fetchMeals({
-      url: "https://us-west-100-cd40-default-rtdb.firebaseio.com/tasks/foodorderapp/meals.json",
-      path: "/tasks/foodorderapp",
+      url: process.env.REACT_APP_MealsAPI,
       rpLoader: (mealsdata) => {
         const rpMeals = [];
 
