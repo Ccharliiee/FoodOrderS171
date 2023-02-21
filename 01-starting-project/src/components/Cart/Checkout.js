@@ -9,7 +9,7 @@ const Checkout = (props) => {
     hasError: nameInputHasError,
     valueChangeHandler: nameChangedHandler,
     inputBlurHandler: nameBlurHandler,
-    reset: resetnameInput,
+    // reset: resetnameInput,
   } = useInput((name) => name.trim() !== "");
 
   const {
@@ -18,7 +18,7 @@ const Checkout = (props) => {
     hasError: addressInputHasError,
     valueChangeHandler: addressChangedHandler,
     inputBlurHandler: addressBlurHandler,
-    reset: resetaddressInput,
+    // reset: resetaddressInput,
   } = useInput((address) => address.trim() !== "");
 
   const {
@@ -27,7 +27,7 @@ const Checkout = (props) => {
     hasError: cityInputHasError,
     valueChangeHandler: cityChangedHandler,
     inputBlurHandler: cityBlurHandler,
-    reset: resetCityInput,
+    // reset: resetCityInput,
   } = useInput((city) => city.trim() !== "");
 
   const {
@@ -36,7 +36,7 @@ const Checkout = (props) => {
     hasError: postalCodeInputHasError,
     valueChangeHandler: postalCodeChangedHandler,
     inputBlurHandler: postalCodeBlurHandler,
-    reset: resetEmailInput,
+    // reset: resetEmailInput,
   } = useInput((postalCode) => postcodeValidator(postalCode, "US"));
 
   const fvalid4Sub =
@@ -53,6 +53,12 @@ const Checkout = (props) => {
     postalCodeBlurHandler();
     if (fvalid4Sub) {
       console.log("enteredName, enteredAddress, enteredCity enteredPostalCode");
+      props.onConfirm({
+        Name: enteredName,
+        Address: enteredAddress,
+        City: enteredCity,
+        PostalCode: enteredPostalCode,
+      });
     }
   };
 
